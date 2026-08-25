@@ -1,14 +1,14 @@
-name: 2.simple demo part 2
+name: simple demo part 2
 
 on:
   workflow_dispatch:
 
 jobs:
   greeting_job:
-runs-on: ubuntu-latest
-  steps:
-    - name: "Say Hello"
-    run: echo "Hi Everyone its Tuesday!"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Say Hello"
+        run: echo "Hi Everyone its Tuesday!"
 
   # This job runs in PARALLEL with greeting_job
   job2:
