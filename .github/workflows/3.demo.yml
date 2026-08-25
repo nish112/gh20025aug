@@ -1,0 +1,26 @@
+name: simple demo part 2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  greeting_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Say Hello"
+        run: echo "Hi Everyone its Tuesday!"
+
+  # This job runs in PARALLEL with greeting_job
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Run Parallel Task"
+        run: echo "I am running at the same time as the greeting job!"
+
+  # This job runs SEQUENTIALLY (only after greeting_job finishes)
+  sequential_job:
+    runs-on: ubuntu-latest
+    needs: greeting_job
+    steps:
+      - name: "Run Sequential Task"
+        run: echo "I waited for the greeting job to finish before starting."
