@@ -1,0 +1,42 @@
+name: trainee-context-demo
+
+on: 
+  workflow_dispatch: 
+
+env:
+  # Demonstrating Literals 
+  WORKFLOW_VERSION: ${{ 1.0 }}                # Number literal
+  IS_TRAINING_ACTIVE: ${{ true }}              # Boolean literal
+  GLOBAL_MESSGE: "Welcome Trainees!"           # String literal
+
+jobs:
+  display-context-job:
+    name: "Understanding Contexts and Variables"
+    runs-on: ubuntu-latest
+    environment: ENV_STATUS # The name of the environment you created in Settings
+    
+    steps:
+      - name: "1. Accessing 'vars' Context"
+        # Accessing UI-defined variables
+        run: |
+          
+          echo "Project Code:     ${{ vars.REPO_PROJECT_CODE }}"
+          echo "Env Var (Custom): ${{ vars.training }}"
+
+      - name: "2. Accessing 'secrets' Context"
+        # Retrieving Org and Repo level secrets
+        # Note: Secrets are masked (***) in logs for security
+        run: |
+          echo "Repo Secret: ${{ secrets.REPO_LEVEL_SECRET }}"
+
+      - name: "3. System Contexts (github & job)"
+        # Metadata about the run and job
+        run: |
+          echo "Actor:       ${{ github.actor }}"
+          echo "Workflow:    ${{ github.workflow }}"
+          echo "Job Status:  ${{ job.status }}"
+
+      - name: "4. Logic with Operators and Literals"
+        
+        if: ${{ env.IS_TRAINING_ACTIVE == 'true' && env.WORKFLOW_VERSION != '0' }}
+        run: echo "The logic test passed because version is ${{ env.WORKFLOW_VERSION }}"
