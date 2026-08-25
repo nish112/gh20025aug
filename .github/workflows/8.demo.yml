@@ -1,0 +1,43 @@
+name: Third demo (cache check logic)
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔍 ID-Based Search
+        id: cache-search
+        uses: actions/cache/restore@v4
+        with:
+          path: output/
+          # The Key is now tied to the unique Git Commit ID
+          key: build-id-${{ github.sha }}
+
+      - name: 🏗️ Logic Execution (If ID not found)
+        if: steps.cache-search.outputs.cache-hit != 'true'
+        run: |
+          echo "ID ${{ github.sha }} not found in Global Store."
+          echo "Building fresh binaries..."
+          mkdir -p output
+          echo "Build Result for SHA ${{ github.sha }}" > output/build.txt
+          sleep 5
+
+      - name: ⚡ Instant Restore (If ID matched)
+        if: steps.cache-search.outputs.cache-hit == 'true'
+        run: |
+          echo "ID ${{ github.sha }} MATCHED!"
+          echo "Retrieving pre-built binaries from Global Store..."
+          cat output/build.txt
+
+      - name: 📦 Register ID to Global Store
+        if: steps.cache-search.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: output/
+          key: build-id-${{ github.sha }}
