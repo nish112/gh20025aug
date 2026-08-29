@@ -1,0 +1,25 @@
+name: ai-300
+
+on: 
+  workflow_dispatch: 
+
+
+jobs:
+  display-context-job:
+    name: "Understanding Contexts and Variables"
+    runs-on: ubuntu-latest
+    
+    
+    steps:
+      - name: "1. Accessing 'vars' Context"
+        # Accessing UI-defined variables
+        run: |
+          
+          echo "Project Code:     ${{ vars.REPO_PROJECT_CODE }}"
+          echo "Env Var (Custom): ${{ vars.training }}"
+
+      - name: "2. Accessing 'secrets' Context"
+        # Retrieving Org and Repo level secrets
+        # Note: Secrets are masked (***) in logs for security
+        run: |
+          echo "Repo Secret: ${{ secrets.REPO_LEVEL_SECRET }}"
