@@ -16,7 +16,6 @@ jobs:
         run: |
           
           echo "Project Code:     ${{ vars.REPO_PROJECT_CODE }}"
-          echo "Env Var (Custom): ${{ vars.training }}"
 
       - name: "2. Accessing 'secrets' Context"
         # Retrieving Org and Repo level secrets
